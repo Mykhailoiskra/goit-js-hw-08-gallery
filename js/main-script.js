@@ -1,13 +1,28 @@
 import images from "./gallery-items.js";
 
 const gallery = document.querySelector(".js-gallery");
-gallery.innerHTML = makeGalleryMarkup(images);
+
 const modal = document.querySelector(".js-lightbox");
 const closeModalBtn = document.querySelector(
   "button[data-action='close-lightbox']"
 );
 const modalImg = document.querySelector(".lightbox__image");
 const overlayEl = document.querySelector(".lightbox__overlay");
+
+gallery.innerHTML = makeGalleryMarkup(images);
+
+if ("loading" in HTMLImageElement.prototype) {
+  const lazyImages = document.querySelectorAll(".lazyload");
+  lazyImages.forEach((image) => (image.src = image.dataset.src));
+} else {
+  const lazyScript = document.createElement("script");
+  lazyScript.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js";
+  lazyScript.integrity =
+    "sha512 - TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb + Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF / XjTUg ==";
+  lazyScript.crossOrigin = "anonymous";
+  document.body.appendChild(lazyScript);
+}
 
 gallery.addEventListener("click", openModalWindow);
 closeModalBtn.addEventListener("click", closeModalWindow);
@@ -73,16 +88,4 @@ function onKeysPress(evt) {
       modalImg.alt = images[currentImg - 1].description;
     }
   }
-}
-if ("loading" in HTMLImageElement.prototype) {
-  const lazyImages = document.querySelectorAll(".lazyload");
-  lazyImages.forEach((image) => (image.src = image.dataset.src));
-} else {
-  const lazyScript = document.createElement("script");
-  lazyScript.src =
-    "https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js";
-  lazyScript.integrity =
-    "sha512 - TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb + Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF / XjTUg ==";
-  lazyScript.crossOrigin = "anonymous";
-  document.body.appendChild(lazyScript);
 }
