@@ -19,14 +19,15 @@ function makeGalleryMarkup(array) {
       (element) =>
         `<li class="gallery__item">
     <a
-        class="gallery__link"
+        class="gallery__link "
         href=${element.original}
     >
         <img
-            class="gallery__image"
-            src=${element.preview}
+            loading="lazy"
+            class="gallery__image lazyload"
+            data-src=${element.preview}
             data-source=${element.original}
-            alt=${element.description}
+            alt="${element.description}"
         />
     </a>
 </li>`
@@ -72,4 +73,16 @@ function onKeysPress(evt) {
       modalImg.alt = images[currentImg - 1].description;
     }
   }
+}
+if ("loading" in HTMLImageElement.prototype) {
+  const lazyImages = document.querySelectorAll(".lazyload");
+  lazyImages.forEach((image) => (image.src = image.dataset.src));
+} else {
+  const lazyScript = document.createElement("script");
+  lazyScript.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js";
+  lazyScript.integrity =
+    "sha512 - TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb + Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF / XjTUg ==";
+  lazyScript.crossOrigin = "anonymous";
+  document.body.appendChild(lazyScript);
 }
